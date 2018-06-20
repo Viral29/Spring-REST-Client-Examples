@@ -30,7 +30,7 @@ public class UserController {
             String limit = map.getFirst("limit");
 
             log.debug("Received limit: [" + limit + "]");
-            if(limit.isEmpty()) {
+            if(limit.isEmpty() || limit.equals("0")) {
                 limit = "10";
             }
 

@@ -10,7 +10,7 @@
 
     <name>springrestclientexamples</name>
     <description>Examples of using rest cleint with spring</description>
-
+w
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

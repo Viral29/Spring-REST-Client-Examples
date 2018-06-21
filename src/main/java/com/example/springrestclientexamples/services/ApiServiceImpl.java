@@ -2,10 +2,15 @@ package com.example.springrestclientexamples.services;
 
 import com.example.api.domain.User;
 import com.example.api.domain.UserData;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -31,5 +36,17 @@ public class ApiServiceImpl implements ApiService {
         UserData userData =restTemplate.getForObject(builder.toUriString(),UserData.class);
 
         return userData.getData();
+    }
+
+    @Override
+    public Flux<User> getUser(Mono<Integer> limit) {
+        return WebClient
+                .create(api_url)
+                .get()
+                .uri(uriBuilder -> uriBuilder.queryParam("limit",limit.block()).build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .flatMap(clientResponse -> clientResponse.bodyToMono(UserData.class))
+                .flatMapIterable(UserData::getData);
     }
 }
